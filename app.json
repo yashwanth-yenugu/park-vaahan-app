@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "parcar-ui",
-    "slug": "parcar-ui",
+    "name": "Park Vaahan",
+    "slug": "park-vaahan-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yash1thr.parkvaahan"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "38608c1e-e297-4803-8118-fbdfec30593d"
+      }
+    },
+    "owner": "yash1thr"
   }
 }

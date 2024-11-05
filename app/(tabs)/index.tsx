@@ -1,70 +1,99 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { useState } from "react";
+import { Button, StyleSheet, FlatList } from "react-native";
+import { router } from "expo-router";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const mockParkingSpots = [
+  {
+    id: "1",
+    type: "Car",
+    location: "Downtown",
+    price: "₹2000/month",
+    available: true,
+  },
+  {
+    id: "2",
+    type: "Bike",
+    location: "Central",
+    price: "₹800/month",
+    available: true,
+  },
+  {
+    id: "3",
+    type: "Car",
+    location: "Suburb",
+    price: "₹1500/month",
+    available: true,
+  },
+];
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+export default function Search() {
+  const [vehicleType, setVehicleType] = useState("Car");
+
+  const renderParkingSpot = ({ item }: any) => {
+    if (item.type !== vehicleType) return null;
+
+    return (
+      <ThemedView style={styles.spotCard}>
+        <ThemedText style={styles.spotText}>
+          Location: {item.location}
+        </ThemedText>
+        <ThemedText style={styles.spotText}>Price: {item.price}</ThemedText>
+        <Button
+          title="Book Now"
+          onPress={() =>
+            router.push({
+              pathname: "/booking",
+              params: { spot: JSON.stringify(item) },
+            })
+          }
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
+    );
+  };
+
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedView style={styles.filterButtons}>
+        <Button
+          title="Car Parking"
+          onPress={() => setVehicleType("Car")}
+          color={vehicleType === "Car" ? "#007AFF" : "#999"}
+        />
+        <Button
+          title="Bike Parking"
+          onPress={() => setVehicleType("Bike")}
+          color={vehicleType === "Bike" ? "#007AFF" : "#999"}
+        />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <FlatList
+        data={mockParkingSpots}
+        renderItem={renderParkingSpot}
+        keyExtractor={(item) => item.id}
+      />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    padding: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  filterButtons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  spotCard: {
+    padding: 15,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  spotText: {
+    marginBottom: 5,
   },
 });
